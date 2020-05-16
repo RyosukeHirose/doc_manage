@@ -29,4 +29,10 @@
         <button type="submit">アップロード</button>
     </div>
 </form>
+<a href="/doc/search/">登録</a>
+<form action="{% url 'doc:search' %}" method="post">
+    {% csrf_token %}
+    <input name="query" value="{{ request.GET.query }}" type="text">
+    <button type="submit">検索する</button>
+</form>
 {% endblock %}

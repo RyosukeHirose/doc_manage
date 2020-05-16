@@ -25,8 +25,10 @@ def get_words_by_mecab(text):
             else:
                 words.append(origin)
         node = node.next
+
     # listで返す
     # return words
+    
     # スペース区切りの文字列（わかち書き）で返す
     return ' '.join(word for word in words)
 

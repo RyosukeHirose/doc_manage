@@ -20,9 +20,10 @@ RUN apt-get update \
 && pip install scikit-learn
 
 
-# mkdir bells_pro
+# mkdir doc_manage_pro
+# cd bells_pro
 # django-admin startproject config .
-# python manage.py startapp bells
+# python manage.py startapp doc_manage
 # python manage.py makemigrations
 # python manage.py migrate
 # python manage.py createsuperuser

@@ -1,17 +1,25 @@
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+
 # PDF
 from pdfminer.converter import PDFPageAggregator
 from pdfminer.layout import LAParams, LTContainer, LTTextBox
 from pdfminer.pdfinterp import PDFPageInterpreter, PDFResourceManager
 from pdfminer.pdfpage import PDFPage
 
-from get_words import get_words_by_mecab
-from analyse import get_tfidf_and_feature_names
+# 手作りメソッド
+from .get_words import get_words_by_mecab
+from .analyse import get_tfidf_and_feature_names
 
 import collections
-
 import numpy as np
+import os
+import glob
 
 def get_all_text_from_pdf(filepath:str):
+    """
+    return list型
+    """
     # Layout Analysisのパラメーターを設定。縦書きの検出を有効にする。
     laparams = LAParams(detect_vertical=True)
     # 共有のリソースを管理するリソースマネージャーを作成。
@@ -26,7 +34,7 @@ def get_all_text_from_pdf(filepath:str):
         for page in PDFPage.get_pages(file):
             interpreter.process_page(page)
             layout = device.get_result()
-
+            # テキストを取得してlistにして返す
             results.append(get_text_list_recursively(layout))
             
         return results
@@ -54,26 +62,28 @@ def list_to_text(text_list):
 
     return attach_text
 
-text = get_all_text_from_pdf('media/20200507/ホームページをPDFファイルとして保存する4つの方法を解説｜ferret.pdf')
-# listを繋げて文字列に変化
-text_all = list_to_text(text)
+def register(self):
+    print(os.getcwd())
+    # file_path = 'doc_manage/media/20200508/ホームページをPDFファイルとして保存する4つの方法を解説｜ferret.pdf'
+    file_paths = glob.glob("doc_manage/media/**/*.pdf", recursive=True)
+    files_count = len(file_paths)
 
-# 単語のlistまたはスペース区切りの文字列を取得
-words_list = get_words_by_mecab(text_all)
-docs = [
-    'ドキュメント 集合 において ドキュメント の 単語 に 付けられる ドキュメント する',
-    '情報検索 において 単語 へ の 重み付け に 使える する',
-    'ドキュメント で 出現した すべて の 単語 の 総数 する'
-    ]
-file_list = []
-file_list.append(words_list)
-for doc in docs:
-    file_list.append(doc)
+    for file_path in file_paths:
+        file_name = os.path.basename(file_path)
+        print("file_name:{}".format(file_path))
+        text = get_all_text_from_pdf(file_path)
+        # listを繋げて文字列に変化
+        text_all = list_to_text(text)
 
-w, feature_names = get_tfidf_and_feature_names(file_list)
-# v = np.asarray([word_vectors(word) for word in feature_names])
-# 単語の数を集計?
-# c = collections.Counter(words_list)
+        # 単語のlistまたはスペース区切りの文字列を取得
+        words_list = get_words_by_mecab(text_all)
 
-# print(c.most_common(5000))
+        # print("word_list:{}".format(words_list))
+        print(type(words_list))
+        word_count = 0
 
+        word_count = get_tfidf_and_feature_names([words_list], file_name, word_count)
+        print(word_count)
+        
+        return word_count
+ 

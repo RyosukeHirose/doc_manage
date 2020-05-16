@@ -12,3 +12,6 @@ class UploadFileForm(forms.Form):
         extension = os.path.splitext(file.name)[1] # 拡張子を取得
         if not extension.lower() in VALID_EXTENSIONS:
             raise forms.ValidationError('pdf, docx, pptファイルを選択してください！')
+
+class SearchForm(forms.Form):
+    search = forms.CharField()

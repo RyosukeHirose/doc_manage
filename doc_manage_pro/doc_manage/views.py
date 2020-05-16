@@ -1,11 +1,20 @@
 import os
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from .forms import UploadFileForm
-from django.views.generic.edit import FormView
 from django.shortcuts import redirect
+# form
+from .forms import UploadFileForm
+from .forms import SearchForm
+# view
+from django.views.generic import TemplateView
+from django.views.generic.edit import FormView
 
+# others
 from datetime import datetime
+
+# 手作り
+from .items.file_reader import register
+from .items.search import search_from_word
 
 UPLOAD_DIR = os.path.dirname(os.path.abspath(__file__)) + '/media/'  # アップロードしたファイルを保存するディレクトリ
 
@@ -24,7 +33,7 @@ def upload_date(date):
 # アップロードされたファイルのハンドル
 def handle_uploaded_file(f):
     update_date = upload_date(datetime.now().strftime('%Y%m%d'))
-    print("now:".format(datetime.now()))
+    print("now:{}".format(datetime.now()))
     path = os.path.join(UPLOAD_DIR + '/' + update_date, f.name)
     with open(path, 'wb+') as destination:
         for chunk in f.chunks():
@@ -51,3 +60,27 @@ class Upload(FormView):
 class UploadComplete(FormView):
     template_name = 'upload_complete.html'
     form_class = UploadFileForm
+
+    def get(self, request, **kwargs):
+        
+        context = {
+        }
+        return self.render_to_response(context)
+
+
+class Search(FormView):
+    template_name = "result.html"
+    form_class = SearchForm
+
+    def get_context_data(self, **kwargs):
+        search_word = self.request.POST.get('query')
+        context = super().get_context_data(**kwargs)
+        datas = search_from_word(search_word)
+
+        files_and_tdidf = {}
+        for data in datas:
+            files_and_tdidf[data.file] = data.tdidf
+            print(files_and_tdidf)
+            
+        return context
+
