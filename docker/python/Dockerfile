@@ -9,12 +9,16 @@ ADD requirements.txt /usr/src/app
 RUN apt-get update \
 && pip install --upgrade pip \
 && pip install -r requirements.txt \
+# mysqlに利用
+&& apt-get install -y python3-dev default-libmysqlclient-dev \
+&& pip install mysqlclient \
+
 # PDFからのテキスト抽出ライブラリ
 && pip install pdfminer.six \
 # mecab
-&& apt install mecab \
-&& apt install libmecab-dev \
-&& apt install mecab-ipadic-utf8 \
+&& apt-get -y install mecab \
+&& apt-get -y install libmecab-dev \
+&& apt-get -y install mecab-ipadic-utf8 \
 && pip3 install mecab-python3 \
 # 機会学習ライブラリ
 && pip install scikit-learn

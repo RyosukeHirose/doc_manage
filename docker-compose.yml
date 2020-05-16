@@ -1,0 +1,46 @@
+version: '3.7'  
+services:  
+  python:  
+    build: ./docker/python/
+    volumes:  
+        - .:/usr/src/app 
+        - ~/.ssh/id_rsa:/home/user/.ssh/id_rsa
+    container_name: doc_manage_python
+    ports:  
+        - 8000:8000 
+    depends_on:
+        - db
+    tty: true
+    stdin_open: true
+
+  db:
+    image: mysql:5.7
+    env_file: ./mysql/.env
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+    - ./mysql/data:/var/lib/mysql
+    - ./mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+    - ./mysql/sql:/docker-entrypoint-initdb.d
+    container_name: doc_manage_db
+    tty: true
+    ports:
+      - 3306:3306
+
+  nginx:
+    build:
+      context: .
+      dockerfile: ./docker/nginx/Dockerfile
+    ports:
+      - '80:80'
+
+    container_name: doc_manage_nginx
+    tty: true
+    depends_on: 
+      - python
+
+
+
+
+   
+
+

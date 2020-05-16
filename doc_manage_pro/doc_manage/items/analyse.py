@@ -4,8 +4,6 @@ from sklearn.feature_extraction.text import CountVectorizer
 from .get_words import get_words_by_mecab
 from .data_register import register, file_check
 
-import pandas as pd
-
 def get_tfidf_and_feature_names(corpus, file_name):
     vectorizer = TfidfVectorizer(token_pattern=u'(?u)\\b\\w+\\b')
     # tftidを計算
