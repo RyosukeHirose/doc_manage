@@ -68,6 +68,10 @@ def register(self):
     file_paths = glob.glob("doc_manage/media/**/*.pdf", recursive=True)
     files_count = len(file_paths)
 
+    word_list_every_file = []
+    file_list = []
+    word_count_list = []
+
     for file_path in file_paths:
         file_name = os.path.basename(file_path)
         print("file_name:{}".format(file_path))
@@ -78,12 +82,11 @@ def register(self):
         # 単語のlistまたはスペース区切りの文字列を取得
         words_list = get_words_by_mecab(text_all)
 
+        word_list_every_file.append(words_list)
+        file_list.append(file_name)
         # print("word_list:{}".format(words_list))
-        print(type(words_list))
-        word_count = 0
 
-        word_count = get_tfidf_and_feature_names([words_list], file_name, word_count)
-        print(word_count)
-        
-        return word_count
+    word_count = get_tfidf_and_feature_names(word_list_every_file, file_name)
+
+    return word_count
  

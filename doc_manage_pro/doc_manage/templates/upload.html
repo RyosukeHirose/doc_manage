@@ -29,10 +29,16 @@
         <button type="submit">アップロード</button>
     </div>
 </form>
-<a href="/doc/search/">登録</a>
+<a href="/doc/new/">登録</a>
 <form action="{% url 'doc:search' %}" method="post">
     {% csrf_token %}
     <input name="query" value="{{ request.GET.query }}" type="text">
-    <button type="submit">検索する</button>
+    <button type="submit">登録されているデータから検索する</button>
+</form>
+
+<form action="{% url 'doc:search2' %}" method="post">
+    {% csrf_token %}
+    <input name="query" value="{{ request.GET.query }}" type="text">
+    <button type="submit">tdidfを計算し直してから検索する</button>
 </form>
 {% endblock %}

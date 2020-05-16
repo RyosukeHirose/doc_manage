@@ -6,8 +6,9 @@ app_name = 'doc'
 urlpatterns = [
     path('upload/', views.Upload.as_view(), name='upload'),
     path('upload_complete/', views.UploadComplete.as_view(), name='upload_complete'),
-    # path('new/', file_reader.register, name='register')
-    path('search/', views.Search.as_view(), name='search')
+    path('new/', file_reader.register, name='register'),
+    path('search/', views.Search.as_view(), name='search'),
+    path('search2/', views.Search2.as_view(), name='search2')
 ]
 
 # if setting.DEBUG:
