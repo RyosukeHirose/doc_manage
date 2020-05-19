@@ -2,3 +2,5 @@ media/
 __pycache__/
 db.sqlite3
 mysql/
+awscli-bundle.zip
+.devcontainer/
