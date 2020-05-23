@@ -1,17 +1,15 @@
 FROM python:3.7
 
 # 作業ディレクトリを設定  
-WORKDIR /usr/src/app  
+WORKDIR /code/
 
-ADD requirements.txt /usr/src/app  
+ADD requirements.txt /code  
 
-# Pipenvをインストール  
 RUN apt-get update \
 && pip install --upgrade pip \
 && pip install -r requirements.txt \
 # mysqlに利用
 && apt-get install -y python3-dev default-libmysqlclient-dev \
-&& pip install mysqlclient \
 
 # PDFからのテキスト抽出ライブラリ
 && pip install pdfminer.six \
@@ -22,7 +20,6 @@ RUN apt-get update \
 && pip3 install mecab-python3 \
 # 機会学習ライブラリ
 && pip install scikit-learn
-
 
 # mkdir doc_manage_pro
 # cd bells_pro

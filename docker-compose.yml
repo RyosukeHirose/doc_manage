@@ -1,13 +1,17 @@
 version: '3.7'  
 services:  
-  python:  
-    build: ./docker/python/
-    volumes:  
-        - .:/usr/src/app 
+  python: 
+    build:
+      context: ./docker/python
+    volumes:
         - ~/.ssh/id_rsa:/home/user/.ssh/id_rsa
+        - ./log/uwsgi/:/var/log/uwsgi
+        - ./static:/static
+        - ./:/code
     container_name: doc_manage_python
-    ports:  
-        - 8000:8000 
+    command: uwsgi --ini /code/doc_manage_pro/config/uwsgi.ini
+    expose:
+      - "8001"
     depends_on:
         - db
     tty: true
@@ -31,8 +35,12 @@ services:
       context: .
       dockerfile: ./docker/nginx/Dockerfile
     ports:
-      - '80:80'
-
+      - '8080:80'
+    volumes:
+      - ./nginx/conf:/etc/nginx/conf.d
+      - ./nginx/uwsgi_params:/etc/nginx/uwsgi_params
+      - ./static:/static
+      - ./log/nginx/:/var/log/nginx
     container_name: doc_manage_nginx
     tty: true
     depends_on: 
