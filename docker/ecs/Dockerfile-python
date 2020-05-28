@@ -1,0 +1,44 @@
+FROM python:3.7
+
+
+COPY ./docker/ecs/requirements.txt /code/
+COPY ./web/run-my-app.sh /code/
+COPY ./ /code/
+
+
+RUN apt-get update \
+&& pip install --upgrade pip \
+&& pip install -r /code/requirements.txt \
+# mysqlに利用
+&& apt-get install -y python3-dev default-libmysqlclient-dev \
+# PDFからのテキスト抽出ライブラリ
+&& pip install pdfminer.six \
+# mecab
+&& apt-get -y install mecab \
+&& apt-get -y install libmecab-dev \
+&& apt-get -y install mecab-ipadic-utf8 \
+&& pip3 install mecab-python3 \
+# 機会学習ライブラリ
+&& pip install scikit-learn
+# PDF作成ライブラリ
+&& pip install pdfkit
+
+RUN chown 777 /code/run-my-app.sh
+
+EXPOSE 8001
+
+# 作業ディレクトリを設定  
+WORKDIR /code/
+
+RUN mkdir /var/log/uwsgi/
+
+
+# mkdir doc_manage_pro
+# cd bells_pro
+# django-admin startproject config .
+# python manage.py startapp doc_manage
+# python manage.py makemigrations
+# python manage.py migrate
+# python manage.py createsuperuser
+
+# python manage.py runserver 0:8000

@@ -20,6 +20,8 @@ from .items.file_reader import get_all_text_from_pdf, list_to_text
 from .items.get_words import get_words_by_mecab
 
 UPLOAD_DIR = os.path.dirname(os.path.abspath(__file__)) + '/media/'  # アップロードしたファイルを保存するディレクトリ
+def index(self):
+    return redirect('doc:upload') 
 
 # アップロードされた日のフォルダがあればそのままreturn 、なければ作成してreturn
 def upload_date(date):
