@@ -9,7 +9,9 @@ urlpatterns = [
     path('upload_complete/', views.UploadComplete.as_view(), name='upload_complete'),
     path('new/', file_reader.register, name='register'),
     path('search/', views.Search.as_view(), name='search'),
-    path('search2/', views.Search2.as_view(), name='search2')
+    path('search2/', views.Search2.as_view(), name='search2'),
+    path('make_pdf/',views.make_pdf , name='search2')
+
 ]
 
 # if setting.DEBUG:

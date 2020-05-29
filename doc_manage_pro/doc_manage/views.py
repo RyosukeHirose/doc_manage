@@ -18,8 +18,14 @@ from .items.search import search_from_word
 from .items.analyse import get_tfidf_and_feature_names
 from .items.file_reader import get_all_text_from_pdf, list_to_text
 from .items.get_words import get_words_by_mecab
+from .items.make_pdf import make_pdf_from_url
 
 UPLOAD_DIR = os.path.dirname(os.path.abspath(__file__)) + '/media/'  # アップロードしたファイルを保存するディレクトリ
+
+def make_pdf(self):
+    make_pdf_from_url(self)
+    return redirect('doc:upload_complete')  
+
 def index(self):
     return redirect('doc:upload') 
 

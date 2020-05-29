@@ -1,17 +1,25 @@
 import pdfkit
 
-# 指定できる出力オプション https://wkhtmltopdf.org/usage/wkhtmltopdf.txt
+# def make_pdf_from_url(self):
 options = {
-    'page-size': 'A4',
-    'margin-top': '0.1in',
-    'margin-right': '0.1in',
-    'margin-bottom': '0.1in',
-    'margin-left': '0.1in',
+    'page-size': 'Letter',
+    'margin-top': '0.75in',
+    'margin-right': '0.75in',
+    'margin-bottom': '0.75in',
+    'margin-left': '0.75in',
     'encoding': "UTF-8",
-    'no-outline': None,
-    'disable-smart-shrinking': '',
+    'custom-header' : [
+        ('Accept-Encoding', 'gzip')
+    ],
+    'cookie': [
+        ('cookie-name1', 'cookie-value1'),
+        ('cookie-name2', 'cookie-value2'),
+    ],
+    'no-outline': None
 }
 
-config_path ='/code/wkhtmltox/bin/wkhtmltopdf'
+config_path ='/usr/local/bin/wkhtmltopdf'
 config = pdfkit.configuration(wkhtmltopdf=config_path)
-pdfkit.from_url('https://google.com', 'google.pdf', options=options, configuration=config)
+pdfkit.from_url('https://nsmr.tk/pythonpdf.html', 'google.pdf', configuration=config)
+
+# pdfkit.from_string('Hello!', 'out.pdf', configuration=config)
