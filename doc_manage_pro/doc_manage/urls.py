@@ -10,7 +10,7 @@ urlpatterns = [
     path('new/', file_reader.register, name='register'),
     path('search/', views.Search.as_view(), name='search'),
     path('search2/', views.Search2.as_view(), name='search2'),
-    path('make_pdf/',views.make_pdf , name='search2')
+    path('make_pdf/',views.MakePdf.as_view() , name='make_pdf')
 
 ]
 

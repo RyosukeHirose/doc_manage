@@ -41,5 +41,13 @@
     <input name="query" value="{{ request.GET.query }}" type="text">
     <button type="submit">tdidfを計算し直してから検索する</button>
 </form>
+<form action="{% url 'doc:make_pdf' %}" method='post'>
+    {% csrf_token %}
+<p>file_url</p>
+<input name="pdf" value="{{ request.GET.query }}" type="text">
+<p>file_name</p>
+<input name="name" value="{{ request.GET.query }}" type="text">
+    <button type="submit">webページをpdfに変換する</button>
+</form>
 <a href="/doc/make_pdf">pdf作成</a>
 {% endblock %}

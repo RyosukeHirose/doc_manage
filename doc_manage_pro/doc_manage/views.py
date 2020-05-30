@@ -19,36 +19,31 @@ from .items.analyse import get_tfidf_and_feature_names
 from .items.file_reader import get_all_text_from_pdf, list_to_text
 from .items.get_words import get_words_by_mecab
 from .items.make_pdf import make_pdf_from_url
+from .items.file_register import handle_uploaded_file
 
 UPLOAD_DIR = os.path.dirname(os.path.abspath(__file__)) + '/media/'  # アップロードしたファイルを保存するディレクトリ
 
-def make_pdf(self):
-    make_pdf_from_url(self)
-    return redirect('doc:upload_complete')  
+class MakePdf(FormView):
+    template_name = "upload_complete.html"
+    form_class = SearchForm
+    def get_context_data(self, **kwargs):
+        web_url = self.request.POST.get('pdf')
+        name = self.request.POST.get('name')
+        context = super().get_context_data(**kwargs)
+        make_pdf_from_url(web_url, name)
+        context = {
+            # "datas": datas,
+            # "total_time": finish_time
+        }
+
+        return context
+
+    
 
 def index(self):
     return redirect('doc:upload') 
 
-# アップロードされた日のフォルダがあればそのままreturn 、なければ作成してreturn
-def upload_date(date):
-    date_file = os.listdir(path=UPLOAD_DIR)
-    print("date_file:{}".format(date_file))
-    if date in date_file:
-        return date
-    else:
-        os.makedirs(UPLOAD_DIR + date)
-        return date
 
-
-
-# アップロードされたファイルのハンドル
-def handle_uploaded_file(f):
-    update_date = upload_date(datetime.now().strftime('%Y%m%d'))
-    print("now:{}".format(datetime.now()))
-    path = os.path.join(UPLOAD_DIR + '/' + update_date, f.name)
-    with open(path, 'wb+') as destination:
-        for chunk in f.chunks():
-            destination.write(chunk)
 
 
 # ファイルアップロード
@@ -115,7 +110,6 @@ class Search2(FormView):
         context = super().get_context_data(**kwargs)
         # 保存されているパスを取得
         file_paths = glob.glob("doc_manage/media/**/*.pdf", recursive=True)    
-        print(file_paths)
 
         word_list_every_file = []
         file_list = []
@@ -134,7 +128,7 @@ class Search2(FormView):
             file_list.append(file_name)
 
         # tdidfを計測して、単語数を取得
-        word_count = get_tfidf_and_feature_names(word_list_every_file, file_name)
+        word_count = get_tfidf_and_feature_names(word_list_every_file, file_list)
         # Tdidfテーブルから該当のデータを取得
         datas = search_from_word(search_word)
 

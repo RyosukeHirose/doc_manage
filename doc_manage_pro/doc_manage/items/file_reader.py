@@ -63,7 +63,6 @@ def list_to_text(text_list):
     return attach_text
 
 def register(self):
-    print(os.getcwd())
     # file_path = 'doc_manage/media/20200508/ホームページをPDFファイルとして保存する4つの方法を解説｜ferret.pdf'
     file_paths = glob.glob("doc_manage/media/**/*.pdf", recursive=True)
     files_count = len(file_paths)
@@ -84,7 +83,6 @@ def register(self):
 
         word_list_every_file.append(words_list)
         file_list.append(file_name)
-        # print("word_list:{}".format(words_list))
 
     word_count = get_tfidf_and_feature_names(word_list_every_file, file_name)
 

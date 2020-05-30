@@ -2,12 +2,12 @@ import os
 import sys
 from ..models import File, Word, Tdidf
 
-def file_check(file_name):
-    file_name, create_check = File.objects.get_or_create(
-        file_name=file_name
+def file_check(pdf_name):
+    pdf_name, create_check = File.objects.get_or_create(
+        file_name=pdf_name
     )
-    if create_check: print("created new file: {}".format(file_name))
-    return file_name
+    if create_check: print("created new file: {}".format(pdf_name))
+    return pdf_name
 
 
 
@@ -26,7 +26,6 @@ def register(doc_id, feature_word, tfidf, file_name):
         word=word,
         defaults={"tdidf":tfidf}
     )
-    # print("register_word:{}, tdif{}".format(word, tfidf)) if tdidf_create_check else print("update_word:{}, tdif{}".format(word, tfidf))
 
     return True
 
@@ -39,7 +38,6 @@ def register(doc_id, feature_word, tfidf, file_name):
 # def register(request):
     # word = Word.objects.all().filter(word_name="word10")
     # file = word[0].files.all()
-    # print(word)
 
     # file = File.objects.create(file_name="file3")
     # word = Word.objects.create(word_name="word3")
