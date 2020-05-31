@@ -6,3 +6,5 @@ awscli-bundle.zip
 .devcontainer/
 log/**/*.log
 static/admin/
+*.zip
+*.deb

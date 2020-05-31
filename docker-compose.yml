@@ -7,7 +7,7 @@ services:
         - ~/.ssh/id_rsa:/home/user/.ssh/id_rsa
         - ./log/uwsgi/:/var/log/uwsgi
         - ./static:/static
-        - ./:/code
+        - ./src:/code
     container_name: doc_manage_python
     command: uwsgi --ini /code/doc_manage_pro/config/uwsgi.ini
     expose:
