@@ -9,7 +9,7 @@ services:
         - ./static:/static
         - ./:/code
     container_name: doc_manage_python
-    command: uwsgi --ini /code/doc_manage_pro/config/uwsgi.ini
+    command: uwsgi --ini /code/src/doc_manage_pro/config/uwsgi.ini
     expose:
       - "8001"
     depends_on:

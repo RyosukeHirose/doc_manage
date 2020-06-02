@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>結果</h1>
+{% for data in datas %}
+<p>ドキュメント名：{{ data.file }}</p>
+<p>類似度：{{ data.tdidf }}</p>
+{% endfor%}
+<p>{{ file_count }}つのファイルの{{ word_count }}の単語から計測した結果から検索した結果、{{total_time}}秒かかりました。</p>
+<p>検索時間：{{ total_time }}秒</p>
+
+<a href="{% url 'doc:upload' %}"><button>戻る</button></a>
+{% endblock %}

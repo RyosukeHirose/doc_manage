@@ -1,0 +1,53 @@
+version: '3'
+
+services:
+  db:
+    image : 524910551510.dkr.ecr.ap-northeast-1.amazonaws.com/doc_manage_mysql_ecs
+    volumes:
+      - /mysql/data:/var/lib/mysql 
+    environment:
+      - MYSQL_ROOT_USER=root
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=doc_manage
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=user
+      - TZ=Asia/Tokyo
+    logging:
+      # CloudWatch Logsにログを書き込む
+      # FargateでECSを起動させるなら必須
+      driver: awslogs
+      options:
+        awslogs-group: /ecs/test
+        awslogs-region: ap-northeast-1
+        awslogs-stream-prefix: ecs  
+
+  python:
+    image: 524910551510.dkr.ecr.ap-northeast-1.amazonaws.com/doc_manage_python_ecs
+    command: sh /code/run-my-app.sh
+    links:
+      - db
+    logging:
+      driver: awslogs
+      options:  
+        awslogs-group: /ecs/test
+        awslogs-region: ap-northeast-1
+        awslogs-stream-prefix: ecs        
+
+  nginx :
+    image: 524910551510.dkr.ecr.ap-northeast-1.amazonaws.com/doc_manage_nginx_ecs
+    ports:
+      - "80:80"
+    links:
+      - python
+    logging:
+      driver: awslogs
+      options:
+        awslogs-group: /ecs/test
+        awslogs-region: ap-northeast-1
+        awslogs-stream-prefix: ecs
+
+#  ecsにデプロイ
+# ecs-cli configure --cluster django-ecs-sample --default-launch-type EC2 --config-name django-ecs-sample --region ap-northeast-1
+# ecs-cli up --keypair aws-and-infra-ssh-key --capability-iam --size 1 --instance-type t3.medium --cluster-config django-ecs-sample --ecs-profile default
+# ecs-cli compose --file docker-compose-ecs.yml service up --cluster-config django-ecs-sample 
+

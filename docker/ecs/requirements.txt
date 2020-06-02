@@ -1,0 +1,7 @@
+django==2.2.10
+uwsgi==2.0.18
+mysqlclient==1.4.6 
+flake8
+django-debug-toolbar
+mysql-connector-python
+
