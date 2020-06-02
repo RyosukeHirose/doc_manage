@@ -1,0 +1,165 @@
+#!/bin/bash
+
+urls=(
+    https://www.ruby-lang.org/ja/ 
+    https://ja.wikipedia.org/wiki/Ruby 
+    https://prog-8.com/languages/ruby 
+    https://hnavi.co.jp/knowledge/blog/ruby/ 
+    https://techacademy.jp/magazine/6959 
+    https://www.javadrive.jp/ruby/ 
+    https://railstutorial.jp/ 
+    https://employment.en-japan.com/engineerhub/entry/2019/12/26/103000 
+    https://www.python.jp/ 
+    https://ja.wikipedia.org/wiki/Python 
+    https://www.python.org/ 
+    https://prog-8.com/languages/python 
+    https://www.php.net/manual/ja/intro-whatis.php 
+    https://www.kagoya.jp/howto/wordpress/php/ 
+    https://prog-8.com/languages/php 
+    https://www.scollabo.com/banban/php/index.html 
+    https://techacademy.jp/magazine/6618 
+    https://www.internetacademy.jp/it/programming/php/what-you-can-do-with-php.html 
+    https://hnavi.co.jp/knowledge/blog/php/ 
+    https://www.php-factory.net/aboutphp/01.php 
+    https://www.w3schools.com/php/ 
+    https://techacademy.jp/magazine/8801 
+    https://ja.wikipedia.org/wiki/JavaScript 
+    http://www.tohoho-web.com/js/ 
+    https://www.kagoya.jp/howto/webhomepage/javascript/
+    https://prog-8.com/languages/es6 
+    https://ja.javascript.info/ 
+    https://rfs.jp/sb/javascript 
+    https://www.enable-javascript.com/ja/ 
+    https://aws.amazon.com/jp/what-is-aws/ 
+    https://www.skyarch.net/proactive/cloud/aws/aboutaws_01.html 
+    https://capsulecloud.io/about/aws 
+    https://ja.wikipedia.org/wiki/Amazon_Web_Services 
+    https://udemy.benesse.co.jp/development/web/what-is-aws.html 
+    https://hnavi.co.jp/knowledge/blog/aws/ 
+    https://www.tramsystem.jp/voice/voice-2729/ 
+    https://lab.sonicmoov.com/development/database/aws/ 
+    https://www.youtube.com/watch?v=RrdwaCG8xjU
+    https://www.tramsystem.jp/voice/voice-2729/ 
+    https://iot.kddi.com/column/aws_about/
+    https://future-architect.github.io/typescript-guide/ 
+    https://www.buildinsider.net/web/pronamatypescript/01 
+    https://employment.en-japan.com/engineerhub/entry/2019/04/16/103000 
+    https://dev.classmethod.jp/articles/typescript-tutorial/ 
+    https://www.sejuku.net/blog/93230 
+    https://github.com/microsoft/TypeScript 
+    https://qiita.com/EBIHARA_kenji/items/4de2a1ee6e2a541246f6 
+    https://udemy.benesse.co.jp/development/web/typescript.html 
+    https://www.typescriptlang.org/
+    https://wkhtmltopdf.org/ 
+    https://techacademy.jp/magazine/31328 
+    https://qiita.com/tamikura@github/items/f7509bc94d9a446dad46 
+    https://tech.basicinc.jp/articles/49 
+    https://github.com/wkhtmltopdf/wkhtmltopdf 
+    https://github.com/wkhtmltopdf/wkhtmltopdf/releases 
+    https://www.softel.co.jp/blogs/tech/archives/2147 
+    https://www.jaga.biz/web-dev-php/wkhtmltopdf/ 
+    http://tdoc.info/blog/2012/09/19/wkhtmltopdf.html 
+    https://product.intra-mart.support/hc/ja/articles/360018826534-PDF%E5%87%BA%E5%8A%9B%E3%81%AB%E5%A4%B1%E6%95%97%E3%81%97%E3%81%9F%E5%A0%B4%E5%90%88%E3%81%AE%E5%AF%BE%E5%BF%9C%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6 
+    https://academy.gmocloud.com/qa/20160616/2761 
+    https://ja.wikipedia.org/wiki/Nginx 
+    https://www.ossnews.jp/oss_info/Nginx 
+    https://wa3.i-3-i.info/word12859.html 
+    https://qiita.com/kamihork/items/49e2a363da7d840a4149 
+    https://www.atmarkit.co.jp/ait/articles/1406/17/news013.html 
+    https://www.geekly.co.jp/column/cat-technology/1903_096/ 
+    http://www2.matsue-ct.ac.jp/home/kanayama/text/nginx/node3.html 
+    https://japan.zdnet.com/article/35092031/ 
+    https://kinsta.com/jp/knowledgebase/what-is-nginx/ 
+    https://qiita.com/syou007/items/3e2d410bbe65a364b603 
+    https://qiita.com/smallpalace/items/4c0402b03bb3feaf2240 
+    https://teratail.com/questions/156446 
+    https://blog.tgr.wtf/nginx%E3%81%A7%E3%83%AD%E3%82%B1%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3%E6%AF%8E%E3%81%AB%E3%82%BF%E3%82%A4%E3%83%A0%E3%82%A2%E3%82%A6%E3%83%88%E3%82%92%E8%A8%AD%E5%AE%9A%E3%81%99%E3%82%8B-174.html　
+    https://qastack.jp/server/777749/how-to-disable-timeout-for-nginx 
+    https://server-recipe.com/1615/ 
+    https://www.it-swarm.dev/ja/nginx/nginx%E3%83%AA%E3%83%90%E3%83%BC%E3%82%B9%E3%83%97%E3%83%AD%E3%82%AD%E3%82%B7%E3%81%AB%E3%82%88%E3%82%8A504%E3%82%B2%E3%83%BC%E3%83%88%E3%82%A6%E3%82%A7%E3%82%A4%E3%82%BF%E3%82%A4%E3%83%A0%E3%82%A2%E3%82%A6%E3%83%88%E3%81%8C%E7%99%BA%E7%94%9F%E3%81%99%E3%82%8B/1047126304/ 
+    http://vatchcjplog.blog.shinobi.jp/nginx/%E3%80%90nginx%E3%80%91%E3%83%AC%E3%82%B9%E3%83%9D%E3%83%B3%E3%82%B9%E3%82%BF%E3%82%A4%E3%83%A0%E3%82%A2%E3%82%A6%E3%83%88%E3%81%AE%E8%A8%AD%E5%AE%9A%E3%83%A1%E3%83%A2
+    http://fatsumiyoshi.hatenablog.com/entry/2012/12/27/163812 
+    https://hacknote.jp/archives/3738/ 
+    https://qiita.com/Brokenumbrella/items/2ce3fceadfaa3d62e06f 
+    https://qiita.com/kazunee/items/329d8a99151383706ad8 
+    https://note.crohaco.net/2018/aws-ecs-django/ 
+    https://techblog.istyle.co.jp/archives/1652 
+    https://docs.aws.amazon.com/ja_jp/elasticbeanstalk/latest/dg/create-deploy-python-django.html 
+    https://iridge-tech.hatenablog.com/entry/2019/04/24/162758 
+    https://dev.classmethod.jp/articles/codepipeline-support-ecs-deploy/ 
+    https://dev.classmethod.jp/articles/circleci-ecr-ecs-1/ 
+    https://recipe.kc-cloud.jp/archives/16692 
+    https://medium.com/squeeze-inc/suitebook-infrastructure-have-moved-on-from-elasticbeanstalk-to-ecs-on-fargate-7ab62a317e77 
+    https://www.apple.com/jp/swift/ 
+    https://developer.apple.com/jp/swift/ 
+    https://hnavi.co.jp/knowledge/blog/swift/ 
+    https://www.suzuki.co.jp/car/swift/ 
+    https://employment.en-japan.com/engineerhub/entry/2017/05/25/110000 
+    https://techacademy.jp/magazine/7966 
+    https://blog.codecamp.jp/programming-swift-first-curriculum 
+    https://ascii.jp/elem/000/004/014/4014715/ 
+    https://mono-wireless.com/jp/tech/Internet_of_Things.html 
+    https://aws.amazon.com/jp/iot/what-is-the-internet-of-things/ 
+    https://monstar-lab.com/dp/blog/about-iot/ 
+    https://ja.wikipedia.org/wiki/%E3%83%A2%E3%83%8E%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%BF%E3%83%BC%E3%83%8D%E3%83%83%E3%83%88 
+    https://hnavi.co.jp/knowledge/blog/iot/ 
+    https://iotnews.jp/archives/136211  
+    https://www.internetacademy.co.jp/trends/it-strategy/case-study-internet-of-things-iot.html 
+    https://sackle.co.jp/blog/detail/484-2 
+    https://iot.kddi.com/iot/ 
+    https://www.softbank.jp/biz/future_stride/entry/column/20191125/
+    https://kinarino.jp/cat4-%E3%82%B0%E3%83%AB%E3%83%A1/22784-%E3%80%90%E4%BF%9D%E5%AD%98%E7%89%88%E3%80%91%E6%98%8E%E6%97%A5%E3%81%8B%E3%82%89%E3%80%81%E3%82%82%E3%81%86%E8%BF%B7%E3%82%8F%E3%81%AA%E3%81%84%EF%BC%81%E3%80%8C%E3%81%8A%E5%BC%81%E5%BD%93%E3%81%8A%E3%81%8B%E3%81%9A%E3%80%8D%E5%A4%A7%E4%BA%BA%E3%82%82%E5%AD%90%E4%BE%9B%E3%82%82%E5%A4%A7%E5%A5%BD%E3%81%8D%E4%BA%BA%E6%B0%97%E3%83%AC%E3%82%B7%E3%83%9454%E9%81%B8
+    https://oceans-nadia.com/user/10022/article/1652
+    https://mi-journey.jp/foodie/56878/
+    https://delishkitchen.tv/categories/655 
+    https://kurashinista.jp/feature/detail/1438 
+    https://retty.me/area/PRE32/ARE151/LCAT99/CAT905/ 
+    https://mariegohan.com/3631 
+    https://cookpad.com/search/%E3%81%8A%E5%BC%81%E5%BD%93%20%E3%81%8A%E3%81%8B%E3%81%9A%20%E4%BA%BA%E6%B0%97
+    https://hazard.yahoo.co.jp/article/20200207
+    https://www.newsweekjapan.jp/stories/world/2020/06/post-93561.php
+    https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/kenkou_iryou/dengue_fever_qa_00001.html
+    https://www.asahi.com/articles/ASN616DLRN5WULBJ01H.html
+    https://corona.go.jp/
+    https://www.corona.co.jp/product_intro/
+    https://www.izumo-med.or.jp/news/2306/
+    https://www.clinicfor.life/articles/covid-030/
+    https://www.cookdoor.jp/yakiniku/dictionary/22114_yakin_014/
+    https://www.weblio.jp/content/%E3%82%B3%E3%83%96%E3%82%AF%E3%83%AD
+    https://kotobank.jp/word/%E5%AD%90%E8%A2%8B-504006
+    https://kobukuro.com/
+    https://kobukuro.com/feature/history
+    https://kobukuro.com/feature/profile
+    https://shokulove.jp/topics/ca02/s07/0114?id=96
+    https://blog.goo.ne.jp/okasiraya/e/6ffe8d17489fb899092d0d5407a6fa2b
+    https://item.rakuten.co.jp/kissui/sw06699/
+    https://japan.zdnet.com/article/35137192/
+    http://www.aibsc.jp/nsj/it-jouhoukyoku/contents7_1.html
+    https://www.infraexpert.com/study/networking.html
+    http://e-words.jp/w/%E3%83%8D%E3%83%83%E3%83%88%E3%83%AF%E3%83%BC%E3%82%AF.html
+    https://thinkit.co.jp/story/2015/04/14/5790
+    https://flets-w.com/user/point-otoku/knowledge/other/otherl30.html
+    https://store.google.com/jp/magazine/compare_nest_speakers_displays
+    https://store.google.com/jp/category/connected_home?
+    https://dime.jp/genre/887817/
+    https://www.itmedia.co.jp/pcuser/articles/1711/11/news010.html
+    https://time-space.kddi.com/digicul-column/suguyaru/20171110/2158
+    https://robotstart.info/2020/05/28/google-home-no-longer-available.html
+    https://search.rakuten.co.jp/search/mall/%E3%82%B0%E3%83%BC%E3%82%B0%E3%83%AB%E3%83%9B%E3%83%BC%E3%83%A0+mini/
+    https://www.biccamera.com/bc/item/4997747/
+    )
+
+number=1
+today=$(date "+%Y%m%d")
+
+if [ ! -d doc_manage_pro/doc_manage/media/$today ]; then
+  mkdir doc_manage_pro/doc_manage/media/$today
+fi
+
+for i in ${urls[@]}
+do
+    timeout -sKILL 10 wkhtmltopdf $i doc_manage_pro/doc_manage/media/$today/$number.pdf
+    let number++
+    echo $number
+done
+
