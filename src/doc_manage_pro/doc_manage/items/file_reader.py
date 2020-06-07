@@ -9,7 +9,7 @@ from pdfminer.pdfpage import PDFPage
 
 # 手作りメソッド
 from .get_words import get_words_by_mecab
-from .analyse import get_tfidf_and_feature_names
+from .analyse import calculate_tdidf
 
 import collections
 import numpy as np
@@ -30,6 +30,7 @@ def get_all_text_from_pdf(filepath:str):
     interpreter = PDFPageInterpreter(resource_manager, device)
 
     results = []
+
     with open(filepath, 'rb') as file:
         for page in PDFPage.get_pages(file):
             interpreter.process_page(page)
@@ -62,29 +63,4 @@ def list_to_text(text_list):
 
     return attach_text
 
-def register(self):
-    # file_path = 'doc_manage/media/20200508/ホームページをPDFファイルとして保存する4つの方法を解説｜ferret.pdf'
-    file_paths = glob.glob("doc_manage/media/**/*.pdf", recursive=True)
-    files_count = len(file_paths)
-
-    word_list_every_file = []
-    file_list = []
-    word_count_list = []
-
-    for file_path in file_paths:
-        file_name = os.path.basename(file_path)
-        print("file_name:{}".format(file_path))
-        text = get_all_text_from_pdf(file_path)
-        # listを繋げて文字列に変化
-        text_all = list_to_text(text)
-
-        # 単語のlistまたはスペース区切りの文字列を取得
-        words_list = get_words_by_mecab(text_all)
-
-        word_list_every_file.append(words_list)
-        file_list.append(file_name)
-
-    word_count = get_tfidf_and_feature_names(word_list_every_file, file_name)
-
-    return word_count
  

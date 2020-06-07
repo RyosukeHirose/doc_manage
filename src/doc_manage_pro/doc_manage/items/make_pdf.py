@@ -34,4 +34,7 @@ def make_pdf_from_url(url, name):
         file_name=name + '.pdf'
     )
 
+    
+    return path
+
 # handle_uploaded_file(pdf)
