@@ -2,5 +2,8 @@
 {% extends 'base.html' %}
 {% block content %}
 <h1>アップロード完了</h1>
+{% for sim, file in datas %}
+<p>{{file}}：類似度{{ sim|floatformat:2 }}</p>
+{% endfor %}
 <a href="{% url 'doc:upload' %}"><button>戻る</button></a>
 {% endblock %}

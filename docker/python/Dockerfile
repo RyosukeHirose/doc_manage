@@ -6,6 +6,8 @@ WORKDIR /code/
 ADD requirements.txt /code  
 
 RUN apt-get update \
+&& apt-get -y install jq \
+&& pip install requests \
 && pip install --upgrade pip \
 && pip install -r requirements.txt \
 # mysqlに利用

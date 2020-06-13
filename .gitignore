@@ -3,8 +3,11 @@ __pycache__/
 db.sqlite3
 mysql/
 awscli-bundle.zip
+.DS_Store
 .devcontainer/
 log/**/*.log
 static/admin/
 *.zip
 *.deb
+*.pdf
+test_data/

@@ -1,7 +1,7 @@
 <!-- upload.html -->
 {% extends 'base.html' %}
 {% block content %}
-<h1>アップロード サンプル</h1>
+<h2>ファイルをアップロードして類似度を計算</h2>
 <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     {% if form.errors %}
@@ -16,7 +16,7 @@
             <div class="alert alert-danger">
                 <strong>{{ error|escape }}</strong>
             </div>
-        {% endfor %}
+        {% endfor %}    
     {% endif %}
     {% for field in form %}
     <div class="form-group form-inline">
@@ -29,25 +29,21 @@
         <button type="submit">アップロード</button>
     </div>
 </form>
-<a href="/doc/new/">登録</a>
-<form action="{% url 'doc:search' %}" method="post">
-    {% csrf_token %}
-    <input name="query" value="{{ request.GET.query }}" type="text">
-    <button type="submit">登録されているデータから検索する</button>
-</form>
+<p><a href="{% url 'doc:calculate' %}">tdidfを計算</a></p>
 
-<form action="{% url 'doc:search2' %}" method="post">
-    {% csrf_token %}
-    <input name="query" value="{{ request.GET.query }}" type="text">
-    <button type="submit">tdidfを計算し直してから検索する</button>
-</form>
-<form action="{% url 'doc:make_pdf' %}" method='post'>
-    {% csrf_token %}
-<p>file_url</p>
-<input name="pdf" value="{{ request.GET.query }}" type="text">
-<p>file_name</p>
-<input name="name" value="{{ request.GET.query }}" type="text">
-    <button type="submit">webページをpdfに変換する</button>
-</form>
-<a href="/doc/make_pdf">pdf作成</a>
+<div style="border-top: medium solid #808080;">
+    <h3>webページをPDFにして類似ファイルを検索</h3>
+    <form action="{% url 'doc:make_pdf' %}" method='post'>
+        {% csrf_token %}
+    <p>file_url</p>
+    <input name="pdf" value="{{ request.GET.query }}" type="text">
+    <p>file_name</p>
+    <input name="name" value="{{ request.GET.query }}" type="text">
+        <button type="submit">webページをpdfに変換する</button>
+    </form>
+</div>
+{{ test }}
+
+
+
 {% endblock %}
