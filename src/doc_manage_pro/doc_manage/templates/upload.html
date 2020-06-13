@@ -1,44 +1,20 @@
 <!-- upload.html -->
 {% extends 'base.html' %}
 {% block content %}
-<h2>ファイルをアップロードして類似度を計算</h2>
-<form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    {% if form.errors %}
-        {% for field in form %}
-            {% for error in field.errors %}
-                <div class="alert alert-danger">
-                    <strong>{{ error|escape }}</strong>
-                </div>
-            {% endfor %}
-        {% endfor %}
-        {% for error in form.non_field_errors %}
-            <div class="alert alert-danger">
-                <strong>{{ error|escape }}</strong>
-            </div>
-        {% endfor %}    
-    {% endif %}
-    {% for field in form %}
-    <div class="form-group form-inline">
-        <div class="col-md-8">
-            {{ field }}
-        </div>
-    </div>
-    {% endfor %}
-    <div class="form-group">
-        <button type="submit">アップロード</button>
-    </div>
-</form>
-<p><a href="{% url 'doc:calculate' %}">tdidfを計算</a></p>
 
-<div style="border-top: medium solid #808080;">
-    <h3>webページをPDFにして類似ファイルを検索</h3>
+
+<div>
+
+    <div class="card">
+    <div class="card-content">
+        <span class="card-title">使い方</span>
+        <p>サイトのURLを貼って検索を押すと、似ている内容のQiitaの記事が検索されます。</p>
+    </div>
+    </div>
     <form action="{% url 'doc:make_pdf' %}" method='post'>
         {% csrf_token %}
-    <p>file_url</p>
-    <input name="pdf" value="{{ request.GET.query }}" type="text">
-    <p>file_name</p>
-    <input name="name" value="{{ request.GET.query }}" type="text">
+        <p>サイトURL</p>
+        <input name="pdf" value="{{ request.GET.query }}" type="text">
         <button type="submit">webページをpdfに変換する</button>
     </form>
 </div>

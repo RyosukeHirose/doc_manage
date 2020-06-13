@@ -3,6 +3,7 @@ import os
 import django
 from datetime import datetime
 from django.utils.timezone import localtime
+import MySQLdb
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 
@@ -18,51 +19,61 @@ def get_aricle_from_qiita():
     registeres_articles = File.objects.all().order_by('-created_of_article')
     last_article_date = localtime(registeres_articles[0].created_of_article) if registeres_articles.count() >=1 else datetime.strptime('2000-01-01T12:36:10+09:00', '%Y-%m-%dT%H:%M:%S%z')
     # QiitaAPIで文字列取得
-    for i in range(1,10):
-        headers = {
-            'Authorization': 'Bearer {}'.format(os.environ['QiitaAccess']),
-        }
-        params = (
-            ('per_page', '10'),
-            ('page', i),
-        )
-        responses = requests.get('https://qiita.com/api/v2/items', headers=headers, params=params)
-        
+    for i in range(1,101):
+        try:
+            headers = {
+                'Authorization': 'Bearer {}'.format(os.environ['QiitaAccess']),
+            }
+            params = (
+                ('per_page', '100'),
+                ('page', i),
+            )
+            responses = requests.get('https://qiita.com/api/v2/items', headers=headers, params=params)
+            
 
-        if responses:
-            for article in responses.json():
-                url = article["url"]
-                # pdf作成時のタイトルに/があったらエラーが出るので取り除く
-                title = article["title"].replace("/", "")
-                # 作成日はタイムゾーンつきのdateオブジェクトに変換
-                created_of_article = datetime.strptime(article["created_at"], '%Y-%m-%dT%H:%M:%S%z')
-                
-                # すでにデータベースに登録されている記事を記事作成日で降順に並べ、今回取得してきた記事とくらべる
-                # 過去に取得している記事に入ったらそれ以降はすでに取得ずみなのでbreak
-                if created_of_article <=  last_article_date:
-                    print('Qiita API done!')
-                    break
-                # データベースに必要情報を登録
-                else:
-                    file_path = make_pdf_from_url(url, title)
-                    file_name = os.path.basename(file_path)
-                    text = get_all_text_from_pdf(file_path)
+            if responses:
+                for article in responses.json():
+                    url = article["url"]
+                    # pdf作成時のタイトルに/があったらエラーが出るので取り除く
+                    title = article["title"].replace("/", "")
+                    # 作成日はタイムゾーンつきのdateオブジェクトに変換
+                    created_of_article = datetime.strptime(article["created_at"], '%Y-%m-%dT%H:%M:%S%z')
+                    
+                    # すでにデータベースに登録されている記事を記事作成日で降順に並べ、今回取得してきた記事とくらべる
+                    # 過去に取得している記事に入ったらそれ以降はすでに取得ずみなのでbreak
+                    if created_of_article <=  last_article_date:
+                        print('Qiita API done!')
+                        break
+                    # データベースに必要情報を登録
+                    else:
+                        file_path = make_pdf_from_url(url, title)
+                        file_name = os.path.basename(file_path)
+                        text = get_all_text_from_pdf(file_path)
 
-                    # listを繋げてスペース区切りの文字列に変化
-                    text_all = list_to_text(text)
+                        # listを繋げてスペース区切りの文字列に変化
+                        text_all = list_to_text(text)
 
-                    # スペース区切りの文字列を取得
-                    words_list = get_words_by_mecab(text_all)
+                        # スペース区切りの文字列を取得
+                        words_list = get_words_by_mecab(text_all)
+                        print('-------------------------')
+                        print(url)
 
-                    # 次回からの計算の簡略化のためにデータベースの保存
-                    file = File.objects.update_or_create(
-                        file_name=title,
-                        words_list=words_list,
-                        file_path=file_path,
-                        created_of_article=article["created_at"],
-                        url=url
-                    )
-                    print('file:{}, registered'.format(title))
+                        # 次回からの計算の簡略化のためにデータベースの保存
+                        file = File.objects.update_or_create(
+                            file_name=title,
+                            words_list=words_list,
+                            file_path=file_path,
+                            created_of_article=article["created_at"],
+                            url=url
+                        )
+                        print('file:{}, registered'.format(title))
+        except MySQLdb.OperationalError as e:
+            print('get OperationalError')
+        except Exception as e:
+            print(e)
+            print('get unknownerror')
+
+
     
     all_articles = File.objects.all()
     for article in all_articles:
