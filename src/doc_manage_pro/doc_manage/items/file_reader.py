@@ -18,6 +18,7 @@ import glob
 
 def get_all_text_from_pdf(filepath:str):
     """
+    pdfファイルの中のテキストを読み込む
     return list型
     """
     # Layout Analysisのパラメーターを設定。縦書きの検出を有効にする。

@@ -1,6 +1,5 @@
 from django.urls import path
 from . import views
-from .items import data_register, file_reader
 app_name = 'doc'
 
 urlpatterns = [

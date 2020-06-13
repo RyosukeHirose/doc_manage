@@ -9,3 +9,5 @@ log/**/*.log
 static/admin/
 *.zip
 *.deb
+*.pdf
+test_data/

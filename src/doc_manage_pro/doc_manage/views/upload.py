@@ -24,7 +24,6 @@ class Upload(FormView):
 
         context = {
             'form': form,
-            
         }
 
         return context
@@ -59,6 +58,7 @@ class UploadComplete(FormView):
         file_path = request.GET.get('file_path')
 
         word_list_every_file, file_list = get_word_list_and_file_list([file_path])
+        print('get_word_list_and_file_list done')
         datas = cos_similarity(word_list_every_file)
 
         context = {

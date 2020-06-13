@@ -5,6 +5,10 @@ from ..items.get_words import get_word_list_and_file_list
 from ..items.con_similarity import cos_similarity
 
 class MakePdf(FormView):
+    """
+    入力されたurlのサイトをpdfに変換し、
+    入力された名前をつけて保存
+    """
     template_name = "upload_complete.html"
     form_class = SearchForm
     def get_context_data(self, **kwargs):

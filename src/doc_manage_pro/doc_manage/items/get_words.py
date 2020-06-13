@@ -45,9 +45,8 @@ def get_word_list_and_file_list(file_paths):
     from .file_reader import list_to_text, get_all_text_from_pdf
     word_list_every_file = []
     file_list = []
-
     # ファイルと中身の単語をリストにする
-    for file_path in file_paths:
+    for i, file_path in  enumerate(file_paths):
         file_name = os.path.basename(file_path)
         text = get_all_text_from_pdf(file_path)
 
@@ -59,5 +58,6 @@ def get_word_list_and_file_list(file_paths):
 
         word_list_every_file.append(words_list)
         file_list.append(file_name)
+        print('get_word_list_done from No. {}:{}'.format(i, file_name))
 
     return word_list_every_file, file_list

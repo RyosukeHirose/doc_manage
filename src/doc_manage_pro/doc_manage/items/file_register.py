@@ -4,8 +4,10 @@ from ..models import File
 
 UPLOAD_DIR = os.path.dirname('/'.join(os.path.abspath(__file__).split('/')[0:-1])) + '/media/' # アップロードしたファイルを保存するディレクトリ
 
-# アップロードされた日のフォルダがあればそのままreturn 、なければ作成してreturn
 def upload_date(date):
+    """
+    アップロードされた日のフォルダがあればそのままreturn 、なければ作成してreturn
+    """
     date_file = os.listdir(path=UPLOAD_DIR)
     if date in date_file:
         return date

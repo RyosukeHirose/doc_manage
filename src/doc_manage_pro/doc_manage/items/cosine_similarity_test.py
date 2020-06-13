@@ -6,9 +6,6 @@ import numpy as np
 import scipy.sparse.csr
 import pickle
 
-from .get_words import get_words_by_mecab
-from .data_register import register, file_check
-
 
 def cos(self):
     """
@@ -30,17 +27,16 @@ def cos(self):
         '1 - 0 で コロンビア 勝ち って の は ベスト な 展開 なん す けど ねぇ …',
     ]
     vectorizer = TfidfVectorizer(token_pattern=u'(?u)\\b\\w+\\b')
-
     # tftidを計算
     X = vectorizer.fit_transform(corpus)
     # Numpyでtftidを計算を保存
-    # np.save('doc_manage/media/test_vector.npy', X.toarray())
+    np.save('doc_manage/media/test_vector.npy', X.toarray())
 
     #学習データ（vectorizer）の保存
     file_name="doc_manage/media/params.pkl"
-    # with open(file_name, 'wb') as f:
-    #     pickle.dump(vectorizer, f)
-    # print("#save vectorizer OK!")
+    with open(file_name, 'wb') as f:
+        pickle.dump(vectorizer, f)
+    print("#save vectorizer OK!")
 
     # feature_words = vectorizer.get_feature_names()
 
@@ -52,7 +48,7 @@ def cos(self):
     with open(file_name, 'rb') as f:
         vectorizer = pickle.load(f)
     print("load vectorizer OK!!")
-    
+
     sample = ['ホンダ 半端 ねぇ']
     sample_X = vectorizer.transform(sample)
     feature_words = vectorizer.get_feature_names()
@@ -61,25 +57,11 @@ def cos(self):
     # print("feature_words:{}".format(feature_words))
 
     similarity = cosine_similarity(sample_X, X)[0]
-    
+
     topn_indices = np.argsort(similarity)[::-1]
+    datas = zip(similarity[topn_indices], np.array(corpus)[topn_indices])
 
     for sim, tweet in zip(similarity[topn_indices], np.array(corpus)[topn_indices]):
         print("({:.2f}): {}".format(sim, "".join(tweet.split())))
         
-
-
-
-
-
-    # for doc_id, vec in zip(range(len(corpus)), X.toarray()):
-    #     pdf_name = file_check(pdf_names[doc_id])
-    #     # todo
-    #     # ここで、ファイル名とtdidfの関係をまとめる...？
-
-    #     for w_id, tfidf in sorted(enumerate(vec), key=lambda x: x[1], reverse=True ):
-    #         feature_word = feature_words[w_id]
-    #         if tfidf > 0: register(doc_id, feature_word, tfidf, pdf_name)
-
-
 

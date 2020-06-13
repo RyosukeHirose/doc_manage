@@ -6,7 +6,6 @@ import scipy.sparse.csr
 import pickle
 
 from .get_words import get_words_by_mecab
-from .data_register import file_check
 
 
 def cos_similarity(corpus):
@@ -19,9 +18,11 @@ def cos_similarity(corpus):
     pdf_names:['6.pdf', '5.pdf']
     """
     vectorizer = TfidfVectorizer(token_pattern=u'(?u)\\b\\w+\\b')
+    
 
     # 計算済みのtftid計算の復元
-    tdidf = scipy.sparse.csr.csr_matrix(np.load('doc_manage/media/test_vector.npy'))
+    tdidf = scipy.sparse.csr.csr_matrix(np.load('doc_manage/media/test_vector.npy', mmap_mode='r+'))
+    print('restore tdidf done')
 
     # 実行済みの学習データの復元
     file_name="doc_manage/media/params.pkl"
@@ -48,7 +49,7 @@ def cos_similarity(corpus):
     # 類似ファイルを類似順で表示
     # for sim, tweet in datas:
     #     print("({:.2f}): {}".format(sim, "".join(tweet.split())))
-    return list(datas)
+    return list(datas)[:10]
 
 
 
