@@ -4,6 +4,7 @@ import django
 from datetime import datetime
 from django.utils.timezone import localtime
 import MySQLdb
+import re
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 
@@ -12,15 +13,20 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 def get_aricle_from_qiita():
     """
     QiitaのAPIで記事データ（タイトル,URL,記事作成日）を取得
+    article['body']:本文のマークダウン形式の文字列
     """
     word_list_every_file = []
     file_list = []
     start_time = datetime.now()
     registeres_articles = File.objects.all().order_by('-created_of_article')
     last_article_date = localtime(registeres_articles[0].created_of_article) if registeres_articles.count() >=1 else datetime.strptime('2000-01-01T12:36:10+09:00', '%Y-%m-%dT%H:%M:%S%z')
+    count = 1
+    break_flag =False
     # QiitaAPIで文字列取得
     for i in range(1,101):
         try:
+            if break_flag:
+                break
             headers = {
                 'Authorization': 'Bearer {}'.format(os.environ['QiitaAccess']),
             }
@@ -33,7 +39,8 @@ def get_aricle_from_qiita():
 
             if responses:
                 for article in responses.json():
-                    url = article["url"]
+                    body = article['body']
+                    url = article["url"]                    
                     # pdf作成時のタイトルに/があったらエラーが出るので取り除く
                     title = article["title"].replace("/", "")
                     # 作成日はタイムゾーンつきのdateオブジェクトに変換
@@ -42,43 +49,50 @@ def get_aricle_from_qiita():
                     # すでにデータベースに登録されている記事を記事作成日で降順に並べ、今回取得してきた記事とくらべる
                     # 過去に取得している記事に入ったらそれ以降はすでに取得ずみなのでbreak
                     if created_of_article <=  last_article_date:
-                        print('Qiita API done!')
+                        print('This page of Qiita API done!')
+                        break_flag = True
                         break
                     # データベースに必要情報を登録
                     else:
-                        file_path = make_pdf_from_url(url, title)
-                        file_name = os.path.basename(file_path)
-                        text = get_all_text_from_pdf(file_path)
-
+                        """
+                        pdfとして保存する場合。今回は保存せずAPIのreturnから取得する
+        
+                        # file_path = make_pdf_from_url(url, title)
+                        # file_name = os.path.basename(file_path)
+                        # text = get_all_text_from_pdf(file_path)
                         # listを繋げてスペース区切りの文字列に変化
-                        text_all = list_to_text(text)
+                        # text_all = list_to_text(text)
+                        """
+                        # APIを利用して本文を取得
+                        # 本文からurlを削除
+                        text_all = re.sub(r"(https?|ftp)(:\/\/[-_\.!~*\'()a-zA-Z0-9;\/?:\@&=\+$,%#]+)", "" ,body)
+                        # 本文からタグを削除
+                        text_all = re.sub(r"<[^>]*?>", "" ,text_all)
 
-                        # スペース区切りの文字列を取得
+                        # # スペース区切りの文字列を取得
                         words_list = get_words_by_mecab(text_all)
-                        print('-------------------------')
-                        print(url)
 
-                        # 次回からの計算の簡略化のためにデータベースの保存
+                        # # 次回からの計算の簡略化のためにデータベースの保存
                         file = File.objects.update_or_create(
                             file_name=title,
                             words_list=words_list,
-                            file_path=file_path,
+                            # file_path=file_path,
                             created_of_article=article["created_at"],
                             url=url
                         )
-                        print('file:{}, registered'.format(title))
+                        print('No.{} file:{}, registered'.format(count, title))
+                        count += 1
         except MySQLdb.OperationalError as e:
             print('get OperationalError')
         except Exception as e:
-            print(e)
-            print('get unknownerror')
+            print('get unknownerror:{}'.format(e))
 
 
     
     all_articles = File.objects.all()
     for article in all_articles:
         word_list_every_file.append(article.words_list)
-        file_name = os.path.basename(article.file_path)
+        file_name = article.file_name
         file_list.append(file_name)
 
     # コサイン類似度を学習して、単語数を取得

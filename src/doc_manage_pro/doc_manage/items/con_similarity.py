@@ -3,8 +3,9 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
 import scipy.sparse.csr
+from scipy.sparse import load_npz
 import pickle
-
+from scipy.io import mmread
 from .get_words import get_words_by_mecab
 
 
@@ -21,7 +22,7 @@ def cos_similarity(corpus):
     
 
     # 計算済みのtftid計算の復元
-    tdidf = scipy.sparse.csr.csr_matrix(np.load('doc_manage/media/test_vector.npy', mmap_mode='r+'))
+    tdidf = load_npz('doc_manage/media/tdidf.npz')
     print('restore tdidf done')
 
     # 実行済みの学習データの復元

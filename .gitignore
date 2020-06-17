@@ -5,6 +5,7 @@ mysql/
 awscli-bundle.zip
 .DS_Store
 .devcontainer/
+.env
 log/**/*.log
 static/admin/
 *.zip

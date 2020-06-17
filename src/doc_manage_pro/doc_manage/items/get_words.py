@@ -1,5 +1,6 @@
 import MeCab
 import os
+import re
 
 m = MeCab.Tagger('-Ochasen')
 
@@ -49,9 +50,11 @@ def get_word_list_and_file_list(file_paths):
     for i, file_path in  enumerate(file_paths):
         file_name = os.path.basename(file_path)
         text = get_all_text_from_pdf(file_path)
-
+        
         # listを繋げてスペース区切りの文字列に変化
         text_all = list_to_text(text)
+        # 本文からurlを削除
+        text_all = re.sub(r"(https?|ftp)(:\/\/[-_\.!~*\'()a-zA-Z0-9;\/?:\@&=\+$,%#]+)", "" ,text_all)
 
         # スペース区切りの文字列を取得
         words_list = get_words_by_mecab(text_all)

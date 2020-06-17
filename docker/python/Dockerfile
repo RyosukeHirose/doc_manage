@@ -9,7 +9,9 @@ RUN apt-get update \
 && apt-get -y install jq \
 && pip install requests \
 && pip install --upgrade pip \
+&& pip install django-environ \
 && pip install -r requirements.txt \
+&& pip install pandas \
 # mysqlに利用
 && apt-get install -y python3-dev default-libmysqlclient-dev \
 # PDFからのテキスト抽出ライブラリ
@@ -48,7 +50,7 @@ RUN wget https://noto-website.storage.googleapis.com/pkgs/Noto-unhinted.zip \
 
 
 # mkdir doc_manage_pro
-# cd bells_pro
+# cd doc_manage_pro
 # django-admin startproject config .
 # python manage.py startapp doc_manage
 # python manage.py makemigrations

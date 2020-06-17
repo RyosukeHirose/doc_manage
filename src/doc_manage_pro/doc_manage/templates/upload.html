@@ -2,24 +2,56 @@
 {% extends 'base.html' %}
 {% block content %}
 
-
 <div>
-
     <div class="card">
-    <div class="card-content">
-        <span class="card-title">使い方</span>
-        <p>サイトのURLを貼って検索を押すと、似ている内容のQiitaの記事が検索されます。</p>
+        <div class="card-content">
+            <span class="card-title">使い方</span>
+            <p>サイトのURLを貼って検索を押すと、似ている内容のQiitaの記事が検索されます。</p>
+        </div>
     </div>
-    </div>
-    <form action="{% url 'doc:make_pdf' %}" method='post'>
+<form id="url_sub" action="{% url 'doc:search_qiita' %}" method='post'>
         {% csrf_token %}
-        <p>サイトURL</p>
-        <input name="pdf" value="{{ request.GET.query }}" type="text">
-        <button type="submit">webページをpdfに変換する</button>
+        <div class="row">
+            <div class="col s12">
+            <div class="row">
+                    <div class="input-field col s12">
+                    <i class="material-icons prefix">web</i>
+                    <input type="text" name="pdf" value="{{ request.GET.query }}" id="autocomplete-input" class="autocomplete">
+                    <label for="autocomplete-input">サイトURL</label>
+                    <!-- Modal Trigger submitはjsで行う-->
+                    <button data-target="modal1" id="open_modal" class="btn modal-trigger" type="button">類似しているQiita記事を検索</button>
+                    
+                    </div>
+                </div>
+            </div>
+        </div>
     </form>
 </div>
-{{ test }}
 
 
-
+<!-- Modal Structure -->
+<div id="modal1" class="modal">
+    <div class="modal-content">
+        <h4>類似記事検索中</h4>
+        <div class="progress">
+            <div class="indeterminate"></div>
+        </div>
+    </div>
+</div>
+{% comment %} result {% endcomment %}
+<div class="row">
+{% for result in results %}
+    <div class="col s12 m6">
+        <div class="card  hoverable small">
+            <div class="card-content">
+                <span class="card-title">{{ result.0 }}</span>
+                <p>記事の類似度:{{ result.1 }}</p>
+            </div>
+        <div class="card-action">
+            <a href="{{ result.2 }} ">記事へ飛ぶ</a>
+        </div>
+        </div>
+    </div>
+{% endfor%}
+</div>
 {% endblock %}

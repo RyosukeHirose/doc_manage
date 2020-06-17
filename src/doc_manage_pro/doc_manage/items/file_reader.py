@@ -58,6 +58,10 @@ def get_text_list_recursively(layout):
     return []
 
 def list_to_text(text_list):
+    """
+    text_list:[['1行ずつテキストになって'],['listの形式で'],['持っている'],[最後につなげられる]]
+    attach_text:'1行ずつテキストになってlistの形式で持っている最後につなげられる'
+    """
     attach_text = ''
     for text in text_list:
         attach_text += ''.join(text)
